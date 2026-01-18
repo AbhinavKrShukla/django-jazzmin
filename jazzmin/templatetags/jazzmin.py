@@ -263,7 +263,7 @@ def jazzmin_paginator_number(change_list: ChangeList, i: int) -> SafeText:
         </li>
         """.format(link=link, disabled="disabled" if link == "#" else "")
 
-    return format_html(html_str)
+    return format_html("{}", html_str)
 
 
 @register.simple_tag
