@@ -1,22 +1,28 @@
 {% load i18n jazzmin %}
 {% trans "General" as general_tab %}
 {% get_sections adminform inline_admin_formsets as forms %}
-
 {% block tabs %}
 <ul class="nav nav-tabs mb-3" role="tablist" id="jazzy-tabs">
     {% for fieldset in forms %}
         <li class="nav-item">
-            <a class="nav-link{% if forloop.first %} active{% endif %}" data-toggle="pill" role="tab" aria-controls="{{ fieldset.name|default:general_tab|unicode_slugify }}-tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}" href="#{{ fieldset.name|default:general_tab|unicode_slugify }}-tab">
+            <a class="nav-link{% if forloop.first %} active{% endif %}"
+               data-bs-toggle="tab"
+               role="tab"
+               aria-controls="{{ fieldset.name|default:general_tab|unicode_slugify }}-tab"
+               aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+               href="#{{ fieldset.name|default:general_tab|unicode_slugify }}-tab">
                 {{ fieldset.name|default:general_tab }}
             </a>
         </li>
     {% endfor %}
 </ul>
 {% endblock tabs %}
-
 <div class="tab-content">
     {% for fieldset in forms %}
-        <div id="{{ fieldset.name|default:general_tab|unicode_slugify }}-tab" class="tab-pane fade{% if forloop.first %} active show{% endif %} {{ fieldset.classes }}" role="tabpanel" aria-labelledby="{{ fieldset.name|default:general_tab|unicode_slugify }}-tab">
+        <div id="{{ fieldset.name|default:general_tab|unicode_slugify }}-tab"
+             class="tab-pane fade{% if forloop.first %} active show{% endif %} {{ fieldset.classes }}"
+             role="tabpanel"
+             aria-labelledby="{{ fieldset.name|default:general_tab|unicode_slugify }}-tab">
             {% if fieldset.is_inline %}
                 {% include fieldset.opts.template with inline_admin_formset=fieldset %}
             {% else %}
@@ -25,21 +31,21 @@
         </div>
     {% endfor %}
 </div>
-
-
 <script>
 (function() {
     // On load: activate tab matching URL hash
     var hash = window.location.hash;
     if (hash) {
-        var target = document.querySelector('.nav-pills a[href="' + hash + '"]');
+        var target = document.querySelector('#jazzy-tabs a[href="' + hash + '"]');
         if (target) {
-            $(target).tab('show');
+            new bootstrap.Tab(target).show();
         }
     }
-    // On tab click: update hash WITHOUT triggering a full navigation
-    $('.nav-pills a[data-toggle="pill"]').on('shown.bs.tab', function(e) {
-        history.replaceState(null, null, e.target.getAttribute('href'));
+    // On tab click: update hash without triggering full navigation
+    document.querySelectorAll('#jazzy-tabs a[data-bs-toggle="tab"]').forEach(function(el) {
+        el.addEventListener('shown.bs.tab', function(e) {
+            history.replaceState(null, null, e.target.getAttribute('href'));
+        });
     });
 })();
 </script>
