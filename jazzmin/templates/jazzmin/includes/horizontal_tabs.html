@@ -25,3 +25,21 @@
         </div>
     {% endfor %}
 </div>
+
+
+<script>
+(function() {
+    // On load: activate tab matching URL hash
+    var hash = window.location.hash;
+    if (hash) {
+        var target = document.querySelector('.nav-pills a[href="' + hash + '"]');
+        if (target) {
+            $(target).tab('show');
+        }
+    }
+    // On tab click: update hash WITHOUT triggering a full navigation
+    $('.nav-pills a[data-toggle="pill"]').on('shown.bs.tab', function(e) {
+        history.replaceState(null, null, e.target.getAttribute('href'));
+    });
+})();
+</script>
