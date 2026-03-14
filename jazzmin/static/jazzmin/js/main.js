@@ -23,45 +23,39 @@
         });
     }
 
-
     function setActiveLinks() {
-        /*
-         Set the currently active menu item based on the current url, or failing that, find the parent
-         item from the breadcrumbs
-         */
         const url = window.location.pathname;
         const $breadcrumb = $('.breadcrumb a').last();
         const $link = $('a[href="' + url + '"]');
         const $parent_link = $('a[href="' + $breadcrumb.attr('href') + '"]');
-
         if ($link.length) {
             $link.addClass('active');
         } else if ($parent_link.length) {
             $parent_link.addClass('active');
-        };
-
+        }
         const $a_active = $('a.nav-link.active');
         const $main_li_parent = $a_active.closest('li.nav-item.has-treeview');
         const $ul_child = $main_li_parent.children('ul');
-
         $ul_child.show();
         $main_li_parent.addClass('menu-is-opening menu-open');
-    };
+    }
+
+    function isPopup() {
+        return window.location.search.indexOf('_popup=1') !== -1;
+    }
 
     $(document).ready(function () {
-        // Set active status on links
-        setActiveLinks()
+        if (isPopup()) {
+            return;
+        }
 
-        // When we use the menu, store its state in a cookie to preserve it
+        setActiveLinks();
         handleMenu();
 
-        // Add minimal changelist styling to templates that we have been unable to override (e.g MPTT)
-        // Needs to be here and not in change_list.js because this is the only JS we are guaranteed to run
-        // (as its included in base.html)
         const $changeListTable = $('#changelist .results table');
-        if ($changeListTable.length && !$changeListTable.hasClass('table table-striped')) {
+        if ($changeListTable.length && !$changeListTable.hasClass('table')) {
             $changeListTable.addClass('table table-striped');
-        };
+        }
     });
 
 })(jQuery);
